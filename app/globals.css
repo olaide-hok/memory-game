@@ -1,26 +1,65 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: var(--clr-grey-50);
+    --foreground: var(--clr-blue-950);
+
+    /* Colors */
+    --clr-white: hsl(0 100% 100%);
+    --clr-black: hsl(0 0% 0%);
+
+    --clr-grey-100: hsl(0 0% 95%);
+    --clr-grey-50: hsl(0 0% 99%);
+
+    --clr-blue-950: hsl(206 45% 15%);
+    --clr-blue-800: hsl(205 30% 27%);
+    --clr-blue-400: hsl(203 22% 55%);
+    --clr-blue-350: hsl(205 37% 55%);
+    --clr-blue-300: hsl(203 28% 79%);
+    --clr-blue-200: hsl(203 25% 90%);
+
+    --clr-orange-400: hsl(37 98% 54%);
+    --clr-orange-300: hsl(36 100% 65%);
+
+    /* Typography */
+    --fs-56: 3.5rem;
+    --fs-48: 3rem;
+    --fs-44: 2.75rem;
+    --fs-40: 2.5rem;
+    --fs-32: 2rem;
+    --fs-26: 1.75rem;
+    --fs-24: 1.5rem;
+    --fs-20: 1.25rem;
+    --fs-18: 1.125rem;
+    --fs-16: 1rem;
+    --fs-15: 0.9375rem;
+    --fs-14: 0.875rem;
+    --fs-13: 0.8125rem;
+
+    --lh-125: 125%;
+
+    --ls-5: 0.3125em;
+
+    --ff-atkinson-hyperlegible: 'Atkinson Hyperlegible', sans-serif;
+
+    --space-0: ;
+    --space-100: 0.5rem;
+    --space-200: 1rem;
+    --space-300: 1.5rem;
+    --space-400: 2rem;
+    --space-500: 2.5rem;
+    --space-600: 3rem;
+    --space-1000: 5rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--ff-atkinson-hyperlegible);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--ff-atkinson-hyperlegible);
 }
