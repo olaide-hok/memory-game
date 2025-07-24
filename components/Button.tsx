@@ -7,17 +7,21 @@ interface ButtonProps {
 }
 
 const variants = {
-    primary:
-        'bg-(--clr-orange-400) hover:bg-(--clr-orange-300) text-(length:--fs-20) text-white py-[0.875rem] px-[1.625rem]',
+    primary: 'bg-(--clr-orange-400) hover:bg-(--clr-orange-300) text-white',
     secondary:
-        'bg-(--clr-blue-100) hover:bg-(--clr-blue-400) text-(length:--fs-20) text-(--clr-blue-800) hover:text-white py-[0.875rem]',
+        'bg-(--clr-blue-100) hover:bg-(--clr-blue-400) text-(--clr-blue-800) hover:text-white',
     selection:
-        'bg-(--clr-blue-300) hover:bg-(--clr-blue-350) text-(length:--fs-20) focus-ring:bg-(--clr-blue-800) text-(--clr-grey-50) text-center py-[0.625rem]',
+        'bg-(--clr-blue-300) hover:bg-(--clr-blue-350) focus-ring:bg-(--clr-blue-800) text-(--clr-grey-50) text-center py-[0.625rem]',
     'big-primary':
-        'bg-(--clr-orange-400) hover:bg-(--clr-orange-300) text-white text-(length:--fs-32) py-[0.875rem] text-center h-[4.375rem]',
+        'bg-(--clr-orange-400) hover:bg-(--clr-orange-300) text-white py-[0.875rem] text-center',
 };
 
-const Button = ({variant = 'primary', name, styles, ...props}: ButtonProps) => {
+const Button = ({
+    variant = 'primary',
+    name,
+    styles,
+    ...props
+}: React.ComponentProps<'button'> & ButtonProps) => {
     return (
         <button
             type="button"
