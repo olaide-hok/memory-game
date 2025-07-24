@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import {Atkinson_Hyperlegible} from 'next/font/google';
 import './globals.css';
+import MemoryGameProvider from '@/context';
 
 const atKinsonHyperlegible = Atkinson_Hyperlegible({
     subsets: ['latin'],
@@ -21,7 +22,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${atKinsonHyperlegible.variable} antialiased`}>
-                {children}
+                <MemoryGameProvider>{children}</MemoryGameProvider>
             </body>
         </html>
     );
