@@ -4,10 +4,10 @@ import {useMemoryGameContext} from '@/context';
 import Button from './Button';
 
 const MenuBar = () => {
-    const {setShowMenu} = useMemoryGameContext();
+    const {setShowMenu, endGame} = useMemoryGameContext();
 
     return (
-        <div className="flex justify-between mb-(--space-500) md:mb-[8.4375rem] md:max-w-[43.0625rem] lg:max-w-[69.375rem] w-full">
+        <div className="flex justify-between md:max-w-[43.0625rem] lg:max-w-[69.375rem] w-full">
             <h1 className="text-(length:--fs-24) md:text-(length:--fs-40) text-(--clr-blue-950) font-bold leading-(--lh-125)">
                 memory
             </h1>
@@ -28,6 +28,7 @@ const MenuBar = () => {
                     variant="secondary"
                     name="New Game"
                     styles="w-[9.3125rem] text-(length:--fs-20) hidden md:block"
+                    onClick={endGame}
                 />
             </div>
         </div>
