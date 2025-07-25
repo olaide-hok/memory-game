@@ -15,6 +15,7 @@ interface MemoryGameContext {
     showGameScreen: boolean;
     showMenu: boolean;
     setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+    endGame: () => void;
 }
 
 const MemoryGameContext = createContext<MemoryGameContext | undefined>(
@@ -59,6 +60,17 @@ const MemoryGameProvider = ({
         setShowGameScreen(true);
     };
 
+    // End Game Fn passed to the 'New Game' button
+    const endGame = () => {
+        setShowGameScreen(false);
+        setShowMenu(false);
+        setGame({
+            theme: '',
+            numOfPlayers: 0,
+            grid: '',
+        });
+    };
+
     return (
         <MemoryGameContext
             value={{
@@ -68,6 +80,7 @@ const MemoryGameProvider = ({
                 showGameScreen,
                 showMenu,
                 setShowMenu,
+                endGame,
             }}>
             {children}
         </MemoryGameContext>
