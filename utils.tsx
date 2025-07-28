@@ -1,5 +1,157 @@
+import Image from 'next/image';
+
 export const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
 };
+
+export const iconSvgToUse = (size: number): React.JSX.Element[] => {
+    return size === 4 ? iconSetFour : iconSetSix;
+};
+
+const iconSetSix = [
+    <Image
+        key="rocket"
+        src="/svg-icons/anchor.svg"
+        alt="Rocket"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="bug-insect"
+        src="/svg-icons/bug.svg"
+        alt="Bug-Insect"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="car"
+        src="/svg-icons/car.svg"
+        alt="Car"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="flask"
+        src="/svg-icons/flask.svg"
+        alt="Flask"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="futbol"
+        src="/svg-icons/futbol.svg"
+        alt="Futbol"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="hand-spock"
+        src="/svg-icons/hand-spock.svg"
+        alt="Hand-spock"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="lira-sign"
+        src="/svg-icons/lira-sign.svg"
+        alt="lira-sign"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="moon"
+        src="/svg-icons/moon.svg"
+        alt="moon"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="snowflake"
+        src="/svg-icons/snowflake.svg"
+        alt="Snow-flake"
+        width={40}
+        height={40}
+    />,
+    <Image
+        key="sun"
+        src="/svg-icons/sun.svg"
+        alt="Sun"
+        width={40}
+        height={40}
+    />,
+];
+
+const iconSetFour = [
+    <Image
+        key="rocket"
+        src="/svg-icons/anchor.svg"
+        alt="Rocket"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="bug-insect"
+        src="/svg-icons/bug.svg"
+        alt="Bug-Insect"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="car"
+        src="/svg-icons/car.svg"
+        alt="Car"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="flask"
+        src="/svg-icons/flask.svg"
+        alt="Flask"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="futbol"
+        src="/svg-icons/futbol.svg"
+        alt="Futbol"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="hand-spock"
+        src="/svg-icons/hand-spock.svg"
+        alt="Hand-spock"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="lira-sign"
+        src="/svg-icons/lira-sign.svg"
+        alt="lira-sign"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="moon"
+        src="/svg-icons/moon.svg"
+        alt="moon"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="snowflake"
+        src="/svg-icons/snowflake.svg"
+        alt="Snow-flake"
+        width={56}
+        height={56}
+    />,
+    <Image
+        key="sun"
+        src="/svg-icons/sun.svg"
+        alt="Sun"
+        width={56}
+        height={56}
+    />,
+];
