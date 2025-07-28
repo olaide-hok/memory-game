@@ -1,11 +1,11 @@
 'use client';
 
-import {createContext, useContext, useState} from 'react';
+import {createContext, useContext, useEffect, useState} from 'react';
 
 export interface GamePreferences {
-    theme: 'numbers' | 'icons' | '';
+    theme: 'numbers' | 'icons';
     numOfPlayers: number;
-    grid: '4x4' | '6x6' | '';
+    grid: '4x4' | '6x6';
 }
 
 interface MemoryGameContext {
@@ -16,6 +16,13 @@ interface MemoryGameContext {
     showMenu: boolean;
     setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
     endGame: () => void;
+    setMoves: React.Dispatch<React.SetStateAction<number>>;
+    time: number;
+    moves: number;
+    startTimer: () => void;
+    restartGame: () => void;
+    onGameComplete: (isComplete: boolean) => void;
+    resetSignal: boolean; // Signal to trigger reset in GameGrid
 }
 
 const MemoryGameContext = createContext<MemoryGameContext | undefined>(
@@ -30,10 +37,14 @@ const MemoryGameProvider = ({
     const [showMenu, setShowMenu] = useState(false);
     const [showGameScreen, setShowGameScreen] = useState(false);
 
+    const [time, setTime] = useState<number>(0); // Time in seconds
+    const [moves, setMoves] = useState<number>(0); // Moves counter
+    const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false); // Timer control
+    const [resetSignal, setResetSignal] = useState<boolean>(false); // Reset signal state
     const [game, setGame] = useState<GamePreferences>({
-        theme: '',
-        numOfPlayers: 0,
-        grid: '',
+        theme: 'numbers',
+        numOfPlayers: 1,
+        grid: '4x4',
     });
 
     const setGamePreferences = (preferences: Partial<GamePreferences>) => {
@@ -60,15 +71,54 @@ const MemoryGameProvider = ({
         setShowGameScreen(true);
     };
 
+    // Restart Game Fn
+    const restartGame = () => {
+        setTime(0);
+        setMoves(0);
+        setIsTimerRunning(false);
+        setShowMenu(false);
+        setResetSignal((prev) => !prev); // Toggle reset signal to trigger GameGrid reset
+    };
+
     // End Game Fn passed to the 'New Game' button
     const endGame = () => {
         setShowGameScreen(false);
         setShowMenu(false);
         setGame({
-            theme: '',
-            numOfPlayers: 0,
-            grid: '',
+            theme: 'numbers',
+            numOfPlayers: 1,
+            grid: '4x4',
         });
+        restartGame();
+    };
+
+    // Timer logic
+    useEffect(() => {
+        let timer: NodeJS.Timeout | null = null;
+        if (isTimerRunning && time >= 0) {
+            timer = setInterval(() => {
+                setTime((prev) => prev + 1);
+            }, 1000);
+        } else if (!isTimerRunning && time !== 0 && timer) {
+            clearInterval(timer);
+        }
+        return () => {
+            if (timer) {
+                clearInterval(timer);
+            }
+        };
+    }, [isTimerRunning, time]);
+
+    const startTimer = () => {
+        if (!isTimerRunning) {
+            setIsTimerRunning(true);
+        }
+    };
+
+    const onGameComplete = (isComplete: boolean) => {
+        if (isComplete) {
+            setIsTimerRunning(false); // Stop the timer when game is complete
+        }
     };
 
     return (
@@ -81,6 +131,13 @@ const MemoryGameProvider = ({
                 showMenu,
                 setShowMenu,
                 endGame,
+                moves,
+                setMoves,
+                time,
+                startTimer,
+                restartGame,
+                onGameComplete,
+                resetSignal,
             }}>
             {children}
         </MemoryGameContext>
