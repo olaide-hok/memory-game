@@ -6,9 +6,11 @@ import MobileMenu from './MobileMenu';
 import GameGrid from './GameGrid';
 import MultiplayerMenu from './MultiplayerMenu';
 import SoloMenu from './SoloMenu';
+import SoloGameResult from './SoloGameResult';
 
 const GameScreen = () => {
-    const {game, time, moves, showMenu} = useMemoryGameContext();
+    const {game, time, moves, showMenu, gameOverModal, restartGame, endGame} =
+        useMemoryGameContext();
 
     return (
         <div className="container flex flex-col items-center py-(--space-300) md:py-(--space-600) px-(--space-300) md:px-[2.5rem] md:pt-[2.3125rem] lg:pt-[4.1875rem] w-full">
@@ -34,6 +36,16 @@ const GameScreen = () => {
 
             {/* Mobile Menu */}
             {showMenu && <MobileMenu />}
+
+            {/* Game Over Modal */}
+            {gameOverModal && (
+                <SoloGameResult
+                    time={time}
+                    moves={moves}
+                    restartGame={restartGame}
+                    endGame={endGame}
+                />
+            )}
         </div>
     );
 };
