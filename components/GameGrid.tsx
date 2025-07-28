@@ -2,37 +2,18 @@
 
 import {useMemoryGameContext} from '@/context';
 import {useEffect, useState} from 'react';
+import {iconSvgToUse} from '@/utils';
 
 interface GameGridProps {
     grid: '4x4' | '6x6';
     theme: 'numbers' | 'icons';
 }
 
-const iconSet = [
-    '🎯',
-    '🐶',
-    '🚀',
-    '🍕',
-    '🎵',
-    '🌟',
-    '📚',
-    '🧠',
-    '🕹️',
-    '🎲',
-    '🚲',
-    '🌈',
-    '🔥',
-    '🎁',
-    '👾',
-    '⚽️',
-    '🍔',
-    '🎮',
-];
-
 // Generate values with pairs
-const generateValues = (totalPairs: number, theme: string) => {
+const generateValues = (totalPairs: number, theme: string, size: number) => {
+    const iconToUse = iconSvgToUse(size);
     const values = Array.from({length: totalPairs}, (_, i) =>
-        theme === 'numbers' ? i + 1 : iconSet[i % iconSet.length]
+        theme === 'numbers' ? i + 1 : iconToUse[i % iconToUse.length]
     ).flatMap((value) => [value, value]); // Create pairs
     for (let i = values.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -59,8 +40,8 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
         Array(totalCells).fill(false)
     ); // Track matched tiles
 
-    const [values, setValues] = useState<(string | number)[]>(
-        generateValues(totalPairs, theme)
+    const [values, setValues] = useState<(number | React.JSX.Element)[]>(
+        generateValues(totalPairs, theme, size)
     );
 
     const handleCellClick = (index: number) => {
@@ -126,7 +107,7 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
         setMatchedPairs(0);
         setCanClick(true);
         setMatchedTiles(Array(totalCells).fill(false));
-        setValues(generateValues(totalPairs, theme));
+        setValues(generateValues(totalPairs, theme, size));
     }, [resetSignal]);
 
     // Handle game completion
@@ -157,11 +138,13 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
                         onClick={() => handleCellClick(index)}
                         className={`aspect-square ${
                             size === 4
-                                ? 'h-[4.5331rem] md:h-[7.375rem] w-[4.5331rem] md:w-[7.375rem]  text-(length:--fs-40) md:text-(length:--fs-56)'
+                                ? 'h-[4.5331rem] md:h-[7.375rem] w-[4.5331rem] md:w-[7.375rem] text-(length:--fs-40) md:text-(length:--fs-56)'
                                 : 'w-[2.9299rem] h-[2.9299rem] md:h-[5.125rem] md:w-[5.125rem] text-(length:--fs-24) md:text-(length:--fs-44)'
-                        } rounded-full flex items-center justify-center text-(--clr-grey-50)  font-bold leading-(--lh-125) cursor-pointer transition-all ${getBgColor(
-                            index
-                        )}                        
+                        } rounded-full flex items-center justify-center text-(--clr-grey-50) font-bold leading-(--lh-125) cursor-pointer transition-all ${
+                            !revealed[index]
+                                ? 'hover:bg-(--clr-blue-350)'
+                                : 'hover:cursor-not-allowed'
+                        } ${getBgColor(index)}                        
                         `}>
                         {revealed[index] ? value : ''}
                     </button>
