@@ -4,7 +4,7 @@ import {useMemoryGameContext} from '@/context';
 import Button from './Button';
 
 const MenuBar = () => {
-    const {setShowMenu, endGame} = useMemoryGameContext();
+    const {setShowMenu, endGame, restartGame} = useMemoryGameContext();
 
     return (
         <div className="flex justify-between md:max-w-[43.0625rem] lg:max-w-[69.375rem] w-full">
@@ -23,6 +23,7 @@ const MenuBar = () => {
                     variant="primary"
                     name="Restart"
                     styles="text-(length:--fs-20) w-[7.9375rem] py-[0.84375rem] hidden md:block"
+                    onClick={restartGame}
                 />
                 <Button
                     variant="secondary"
