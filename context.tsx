@@ -23,6 +23,7 @@ interface MemoryGameContext {
     restartGame: () => void;
     onGameComplete: (isComplete: boolean) => void;
     resetSignal: boolean; // Signal to trigger reset in GameGrid
+    gameOverModal: boolean;
 }
 
 const MemoryGameContext = createContext<MemoryGameContext | undefined>(
@@ -36,6 +37,7 @@ const MemoryGameProvider = ({
 }>) => {
     const [showMenu, setShowMenu] = useState(false);
     const [showGameScreen, setShowGameScreen] = useState(false);
+    const [gameOverModal, setGameOverModal] = useState(false);
 
     const [time, setTime] = useState<number>(0); // Time in seconds
     const [moves, setMoves] = useState<number>(0); // Moves counter
@@ -78,6 +80,7 @@ const MemoryGameProvider = ({
         setIsTimerRunning(false);
         setShowMenu(false);
         setResetSignal((prev) => !prev); // Toggle reset signal to trigger GameGrid reset
+        setGameOverModal(false);
     };
 
     // End Game Fn passed to the 'New Game' button
@@ -118,6 +121,7 @@ const MemoryGameProvider = ({
     const onGameComplete = (isComplete: boolean) => {
         if (isComplete) {
             setIsTimerRunning(false); // Stop the timer when game is complete
+            setGameOverModal(true);
         }
     };
 
@@ -138,6 +142,7 @@ const MemoryGameProvider = ({
                 restartGame,
                 onGameComplete,
                 resetSignal,
+                gameOverModal,
             }}>
             {children}
         </MemoryGameContext>
