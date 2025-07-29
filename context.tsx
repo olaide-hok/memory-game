@@ -1,6 +1,6 @@
 'use client';
 
-import {createContext, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useEffect, useMemo, useState} from 'react';
 
 export interface GamePreferences {
     theme: 'numbers' | 'icons';
@@ -17,6 +17,7 @@ interface MemoryGameContext {
     setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
     endGame: () => void;
     setMoves: React.Dispatch<React.SetStateAction<number>>;
+    setPairsMatched: (playerId: number, moves: number) => void;
     time: number;
     moves: number;
     startTimer: () => void;
@@ -24,6 +25,10 @@ interface MemoryGameContext {
     onGameComplete: (isComplete: boolean) => void;
     resetSignal: boolean; // Signal to trigger reset in GameGrid
     gameOverModal: boolean;
+    pairsMatched: {[key: number]: number}; // Moves per player (playerId: moves)
+    nextTurn: () => void; // Move to the next player's turn
+    currentPlayer: number; // Current player's turn (1 to 4)
+    isMultiplayer: boolean; // Flag to enable/disable turn switching
 }
 
 const MemoryGameContext = createContext<MemoryGameContext | undefined>(
@@ -41,6 +46,17 @@ const MemoryGameProvider = ({
 
     const [time, setTime] = useState<number>(0); // Time in seconds
     const [moves, setMoves] = useState<number>(0); // Moves counter
+
+    const [pairsMatched, setPairsMatchedState] = useState<{
+        [key: number]: number;
+    }>({
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+    });
+    const [currentPlayer, setCurrentPlayer] = useState<number>(1);
+
     const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false); // Timer control
     const [resetSignal, setResetSignal] = useState<boolean>(false); // Reset signal state
     const [game, setGame] = useState<GamePreferences>({
@@ -48,6 +64,20 @@ const MemoryGameProvider = ({
         numOfPlayers: 1,
         grid: '4x4',
     });
+
+    const isMultiplayer = useMemo(
+        () => game.numOfPlayers > 1,
+        [game.numOfPlayers]
+    );
+
+    const nextTurn = () => {
+        if (isMultiplayer) {
+            setCurrentPlayer((prevPlayer) => {
+                const nextPlayer = (prevPlayer % game.numOfPlayers) + 1;
+                return nextPlayer;
+            });
+        }
+    };
 
     const setGamePreferences = (preferences: Partial<GamePreferences>) => {
         setGame((prevGame) => ({
@@ -81,6 +111,10 @@ const MemoryGameProvider = ({
         setShowMenu(false);
         setResetSignal((prev) => !prev); // Toggle reset signal to trigger GameGrid reset
         setGameOverModal(false);
+        if (isMultiplayer) {
+            setPairsMatchedState({1: 0, 2: 0, 3: 0, 4: 0});
+            setCurrentPlayer(1);
+        }
     };
 
     // End Game Fn passed to the 'New Game' button
@@ -100,7 +134,9 @@ const MemoryGameProvider = ({
         let timer: NodeJS.Timeout | null = null;
         if (isTimerRunning && time >= 0) {
             timer = setInterval(() => {
-                setTime((prev) => prev + 1);
+                if (!isMultiplayer) {
+                    setTime((prev) => prev + 1);
+                }
             }, 1000);
         } else if (!isTimerRunning && time !== 0 && timer) {
             clearInterval(timer);
@@ -113,7 +149,7 @@ const MemoryGameProvider = ({
     }, [isTimerRunning, time]);
 
     const startTimer = () => {
-        if (!isTimerRunning) {
+        if (!isTimerRunning && !isMultiplayer) {
             setIsTimerRunning(true);
         }
     };
@@ -123,6 +159,13 @@ const MemoryGameProvider = ({
             setIsTimerRunning(false); // Stop the timer when game is complete
             setGameOverModal(true);
         }
+    };
+
+    const setPairsMatched = (playerId: number, pairs: number) => {
+        setPairsMatchedState((prev) => ({
+            ...prev,
+            [playerId]: pairs,
+        }));
     };
 
     return (
@@ -143,6 +186,11 @@ const MemoryGameProvider = ({
                 onGameComplete,
                 resetSignal,
                 gameOverModal,
+                nextTurn,
+                currentPlayer,
+                isMultiplayer,
+                pairsMatched,
+                setPairsMatched,
             }}>
             {children}
         </MemoryGameContext>
