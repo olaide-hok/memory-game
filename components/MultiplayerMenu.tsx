@@ -1,19 +1,24 @@
 import React from 'react';
 
 interface PlayerProps {
-    player: number;
+    player: string;
     points: number;
+    currentPlayer: number;
 }
 
-const MultiplayerMenu = ({player = 1, points = 0}: PlayerProps) => {
+const MultiplayerMenu = ({player, points, currentPlayer}: PlayerProps) => {
     const showTriangleAndCurrentPlayer =
-        player === 1 ? 'block bg-(--clr-orange-400)' : 'block bg-transparent';
+        parseInt(player) === currentPlayer
+            ? 'block bg-(--clr-orange-400)'
+            : 'block bg-transparent';
     const active =
-        player === 1
+        parseInt(player) === currentPlayer
             ? 'bg-(--clr-orange-400) text-(--clr-white)'
             : 'bg-(--clr-blue-100) text-(--clr-blue-400)';
     const pointsTextColor =
-        player === 1 ? 'text-(--clr-white)' : 'text-(--clr-blue-800)';
+        parseInt(player) === currentPlayer
+            ? 'text-(--clr-white)'
+            : 'text-(--clr-blue-800)';
 
     return (
         <div className="flex flex-col gap-y-(--space-200) w-[4rem] md:w-[10.375rem] xl:w-[15.9375rem] font-bold leading-(--lh-125)">
