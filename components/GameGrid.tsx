@@ -27,8 +27,17 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
     const totalCells = size * size;
     const totalPairs = totalCells / 2;
 
-    const {startTimer, setMoves, onGameComplete, resetSignal} =
-        useMemoryGameContext();
+    const {
+        startTimer,
+        setMoves,
+        onGameComplete,
+        resetSignal,
+        isMultiplayer,
+        currentPlayer,
+        nextTurn,
+        pairsMatched,
+        setPairsMatched,
+    } = useMemoryGameContext();
 
     const [revealed, setRevealed] = useState<boolean[]>(
         Array(totalCells).fill(false)
@@ -77,6 +86,10 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
                 updated[secondIndex] = true;
                 return updated;
             });
+            if (isMultiplayer) {
+                setPairsMatched(currentPlayer, pairsMatched[currentPlayer] + 1); // increment pairs for current player
+                nextTurn(); // Switch turn only in multiplayer mode
+            }
             setSelectedIndices([]);
             setCanClick(true);
         } else {
@@ -89,16 +102,19 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
                 });
                 setSelectedIndices([]);
                 setCanClick(true);
+                if (isMultiplayer) {
+                    nextTurn();
+                } // Switch turn only in multiplayer mode
             }, 1000); // Delay to show mismatch
         }
     };
 
     // Increment moves when two cards are selected
     useEffect(() => {
-        if (selectedIndices.length === 2) {
+        if (selectedIndices.length === 2 && !isMultiplayer) {
             setMoves((prev) => prev + 1);
         }
-    }, [selectedIndices, setMoves]);
+    }, [selectedIndices, setMoves, isMultiplayer]);
 
     // Reset game when grid or theme changes
     useEffect(() => {
@@ -112,10 +128,10 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
 
     // Handle game completion
     useEffect(() => {
-        if (matchedPairs === totalCells) {
-            onGameComplete(true); // Notify context to stop timer
+        if (matchedPairs === totalPairs) {
+            onGameComplete(true);
         }
-    }, [matchedPairs]);
+    }, [matchedPairs, totalPairs]);
 
     const getBgColor = (index: number) => {
         if (matchedTiles[index]) return 'bg-(--clr-orange-400)';
