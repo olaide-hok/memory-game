@@ -68,7 +68,7 @@ const StartGameCard = () => {
                     Grid Size
                 </p>
                 <div className="flex gap-x-(--space-100) md:gap-x-(--space-400)">
-                    {['4x4', '6x6'].map((grid) => (
+                    {['4x4' as const, '6x6' as const].map((grid) => (
                         <Button
                             key={grid}
                             variant="selection"
