@@ -37,9 +37,10 @@ const MultiplayerMenu = ({player, points, currentPlayer}: PlayerProps) => {
                     </span>
                 </div>
             </div>
+
             <p
                 className={` hidden xl:block text-(length:--fs-13) text-(--clr-blue-950) text-center uppercase tracking-(--ls-5)`}>
-                Current turn
+                {parseInt(player) === currentPlayer ? 'Current turn' : ' '}
             </p>
         </div>
     );
