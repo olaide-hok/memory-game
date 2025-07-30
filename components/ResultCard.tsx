@@ -29,16 +29,18 @@ const ResultCard = ({
     numOfPlayers,
 }: ResultCardProps) => {
     const topScorers = getTopScorers(
-        Object.entries(pairsMatched).map(([id, move]) => ({
-            id: parseInt(id),
-            move: move,
-        }))
+        Object.entries(pairsMatched)
+            .filter(([id]) => parseInt(id) <= numOfPlayers)
+            .map(([id, move]) => ({
+                id: parseInt(id),
+                move: move,
+            }))
     );
 
     if (type === 'multiplayer') {
         return (
             <div className="fixed inset-0 w-full h-full bg-(--clr-black)/50 flex items-center justify-center z-10">
-                <div className="flex flex-col gap-y-(--space-300) md:gap-y-(--space-500) rounded-[1.25rem] bg-(--clr-grey-100) px-(--space-300) md:px-[3.4375rem] py-[1.75rem] md:py-[3.71875r]em] w-[20.4375rem] md:w-[40.875rem] font-bold leading-(--lh-125)">
+                <div className="flex flex-col gap-y-(--space-300) md:gap-y-(--space-500) rounded-[1.25rem] bg-(--clr-grey-100) px-(--space-300) md:px-[3.4375rem] py-[1.75rem] md:py-[3.71875rem] w-[20.4375rem] md:w-[40.875rem] font-bold leading-(--lh-125)">
                     <div className="flex flex-col gap-y-(--space-100) md:gap-y-(--space-300) text-center">
                         <h2 className="text-(length:--fs-24) md:text-(length:--fs-48) text-(--clr-blue-850)">
                             {topScorers.length === 1
@@ -55,9 +57,10 @@ const ResultCard = ({
                     <div className="flex flex-col gap-y-(--space-100) md:gap-y-(--space-200)">
                         {Object.entries(pairsMatched)
                             .filter(([id]) => parseInt(id) <= numOfPlayers)
+                            .sort(([, a], [, b]) => b - a)
                             .map(([id, move]) => {
                                 const isWinner = topScorers.some(
-                                    (winner) => winner.move === parseInt(id)
+                                    (winner) => winner.id === parseInt(id)
                                 );
 
                                 const winner = isWinner
