@@ -131,8 +131,8 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
     }, [matchedPairs, totalPairs]);
 
     const getBgColor = (index: number) => {
-        if (matchedTiles[index]) return 'bg-(--clr-orange-400)';
-        if (revealed[index]) return 'bg-(--clr-blue-300)';
+        if (matchedTiles[index]) return 'bg-(--clr-blue-300)';
+        if (revealed[index]) return 'bg-(--clr-orange-400)';
         return 'bg-(--clr-blue-800)';
     };
 
