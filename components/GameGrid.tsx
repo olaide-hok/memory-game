@@ -89,6 +89,8 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
             if (isMultiplayer) {
                 setPairsMatched(currentPlayer, pairsMatched[currentPlayer] + 1); // increment pairs for current player
                 nextTurn(); // Switch turn only in multiplayer mode
+            } else {
+                setMoves((prev) => prev + 1); // Increment moves only on match for solo mode
             }
             setSelectedIndices([]);
             setCanClick(true);
@@ -103,18 +105,13 @@ const GameGrid: React.FC<GameGridProps> = ({grid, theme}) => {
                 setSelectedIndices([]);
                 setCanClick(true);
                 if (isMultiplayer) {
-                    nextTurn();
-                } // Switch turn only in multiplayer mode
-            }, 1000); // Delay to show mismatch
+                    nextTurn(); // Switch turn only in multiplayer mode
+                } else {
+                    setMoves((prev) => prev + 1); // Increment moves only on mismatch for solo mode
+                }
+            }, 500); // Delay to show mismatch
         }
     };
-
-    // Increment moves when two cards are selected
-    useEffect(() => {
-        if (selectedIndices.length === 2 && !isMultiplayer) {
-            setMoves((prev) => prev + 1);
-        }
-    }, [selectedIndices, setMoves, isMultiplayer]);
 
     // Reset game when grid or theme changes
     useEffect(() => {
