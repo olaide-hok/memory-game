@@ -42,8 +42,8 @@ Users should be able to:
 
 ### Links
 
--   Solution URL: [Link](https://your-solution-url.com)
--   Live Site URL: [Link](https://your-live-site-url.com)
+-   Solution URL: [Link](https://github.com/olaide-hok/memory-game)
+-   Live Site URL: [Link](https://play-memory-game-app.netlify.app/)
 
 ## Getting Started
 
